@@ -24,6 +24,48 @@ class ASTNode(metaclass=abc.ABCMeta):
         pass
 
 
+class ASTNodeVisitor(metaclass=abc.ABCMeta):
+    @abc.abstractmethod
+    def visit_number(self, num):
+        pass
+
+    @abc.abstractmethod
+    def visit_func(self, func):
+        pass
+
+    @abc.abstractmethod
+    def visit_func_def(self, func_def):
+        pass
+
+    @abc.abstractmethod
+    def visit_cond(self, cond):
+        pass
+
+    @abc.abstractmethod
+    def visit_print(self, pr):
+        pass
+
+    @abc.abstractmethod
+    def visit_read(self, read):
+        pass
+
+    @abc.abstractmethod
+    def visit_func_call(self, func_call):
+        pass
+
+    @abc.abstractmethod
+    def visit_ref(self, ref):
+        pass
+
+    @abc.abstractmethod
+    def visit_bin_op(self, bin_op):
+        pass
+
+    @abc.abstractmethod
+    def visit_un_op(self, un_op):
+        pass
+
+
 class Number(ASTNode):
     def __init__(self, value):
         self.value = value
