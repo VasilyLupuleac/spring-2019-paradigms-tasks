@@ -23,6 +23,10 @@ class ASTNode(metaclass=abc.ABCMeta):
     def evaluate(self, scope):
         pass
 
+    @abc.abstractmethod
+    def accept(self, visitor):
+        pass
+
 
 class ASTNodeVisitor(metaclass=abc.ABCMeta):
     @abc.abstractmethod
