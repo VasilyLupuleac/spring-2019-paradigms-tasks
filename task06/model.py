@@ -79,6 +79,9 @@ class Number(ASTNode):
     def __hash__(self):
         return hash(self.value)
 
+    def accept(self, visitor):
+        visitor.visit_num(self)
+
 
 class Function(ASTNode):
     def __init__(self, args, body):
@@ -87,6 +90,9 @@ class Function(ASTNode):
 
     def evaluate(self, scope):
         return self
+
+    def accept(self, visitor):
+        visitor.visit_func(self)
 
 
 class FunctionDefinition(ASTNode):
@@ -97,6 +103,9 @@ class FunctionDefinition(ASTNode):
     def evaluate(self, scope):
         scope[self.name] = self.function
         return self.function
+
+    def accept(self, visitor):
+        visitor.visit_func_def(self)
 
 
 class Conditional(ASTNode):
@@ -113,6 +122,9 @@ class Conditional(ASTNode):
             res = stmt.evaluate(scope)
         return res
 
+    def accept(self, visitor):
+        visitor.visit_cond(self)
+
 
 class Print(ASTNode):
     def __init__(self, expr):
@@ -123,6 +135,9 @@ class Print(ASTNode):
         print(res.value)
         return res
 
+    def accept(self, visitor):
+        visitor.visit_print(self)
+
 
 class Read(ASTNode):
     def __init__(self, name):
@@ -132,6 +147,9 @@ class Read(ASTNode):
         value = Number(int(input()))
         scope[self.name] = value
         return value
+
+    def accept(self, visitor):
+        visitor.visit_read(self)
 
 
 class FunctionCall(ASTNode):
@@ -149,6 +167,9 @@ class FunctionCall(ASTNode):
             res = stmt.evaluate(call_scope)
         return res
 
+    def accept(self, visitor):
+        visitor.visit_func_call(self)
+
 
 class Reference(ASTNode):
     def __init__(self, name):
@@ -156,6 +177,9 @@ class Reference(ASTNode):
 
     def evaluate(self, scope):
         return scope[self.name]
+
+    def accept(self, visitor):
+        visitor.visit_ref(self)
 
 
 class BinaryOperation(ASTNode):
@@ -188,6 +212,9 @@ class BinaryOperation(ASTNode):
         res = self.OPS[self.op](lh_value, rh_value)
         return Number(int(res))
 
+    def accept(self, visitor):
+        visitor.visit_bin_op(self)
+
 
 class UnaryOperation(ASTNode):
     OPS = {
@@ -205,3 +232,6 @@ class UnaryOperation(ASTNode):
         value = self.expr.evaluate(scope).value
         res = self.OPS[self.op](value)
         return Number(int(res))
+
+    def accept(self, visitor):
+        visitor.visit_un_op(self)
