@@ -80,7 +80,7 @@ class Number(ASTNode):
         return hash(self.value)
 
     def accept(self, visitor):
-        visitor.visit_num(self)
+        return visitor.visit_num(self)
 
 
 class Function(ASTNode):
@@ -92,7 +92,7 @@ class Function(ASTNode):
         return self
 
     def accept(self, visitor):
-        visitor.visit_func(self)
+        return visitor.visit_func(self)
 
 
 class FunctionDefinition(ASTNode):
@@ -105,7 +105,7 @@ class FunctionDefinition(ASTNode):
         return self.function
 
     def accept(self, visitor):
-        visitor.visit_func_def(self)
+        return visitor.visit_func_def(self)
 
 
 class Conditional(ASTNode):
@@ -123,7 +123,7 @@ class Conditional(ASTNode):
         return res
 
     def accept(self, visitor):
-        visitor.visit_cond(self)
+        return visitor.visit_cond(self)
 
 
 class Print(ASTNode):
@@ -136,7 +136,7 @@ class Print(ASTNode):
         return res
 
     def accept(self, visitor):
-        visitor.visit_print(self)
+        return visitor.visit_print(self)
 
 
 class Read(ASTNode):
@@ -149,7 +149,7 @@ class Read(ASTNode):
         return value
 
     def accept(self, visitor):
-        visitor.visit_read(self)
+        return visitor.visit_read(self)
 
 
 class FunctionCall(ASTNode):
@@ -168,7 +168,7 @@ class FunctionCall(ASTNode):
         return res
 
     def accept(self, visitor):
-        visitor.visit_func_call(self)
+        return visitor.visit_func_call(self)
 
 
 class Reference(ASTNode):
@@ -179,7 +179,7 @@ class Reference(ASTNode):
         return scope[self.name]
 
     def accept(self, visitor):
-        visitor.visit_ref(self)
+        return visitor.visit_ref(self)
 
 
 class BinaryOperation(ASTNode):
@@ -213,7 +213,7 @@ class BinaryOperation(ASTNode):
         return Number(int(res))
 
     def accept(self, visitor):
-        visitor.visit_bin_op(self)
+        return visitor.visit_bin_op(self)
 
 
 class UnaryOperation(ASTNode):
@@ -234,4 +234,4 @@ class UnaryOperation(ASTNode):
         return Number(int(res))
 
     def accept(self, visitor):
-        visitor.visit_un_op(self)
+        return visitor.visit_un_op(self)
