@@ -44,5 +44,9 @@ def test_print_read():
     assert read_x.accept(pr) == "    read x;"
 
 
+def test_print_func_call():
+    pass
+
+
 if __name__ == "__main__":
     pytest.main()

@@ -67,7 +67,21 @@ class PrettyPrinter(ASTNodeVisitor):
         return self.indent() + "read " + read.name + ";"
 
     def visit_func_call(self, func_call):
-        pass
+        func = func_call.fun_expr
+        res_string = func.accept(self)
+        if res_string.endswith(";"):
+            res_string = res_string[:-1]
+        res_string += "("
+        for arg in func_call.args:
+            arg_expr = arg.accept(self)
+            if arg_expr.endswith(";"):
+                arg_expr = arg_expr[:-1]
+            res_string += arg_expr + ", "
+        if res_string.endswith(", "):
+            res_string = res_string[:-2]
+        res_string += ");"
+        return res_string
+
 
     def visit_ref(self, ref):
         pass
