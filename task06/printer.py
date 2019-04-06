@@ -7,9 +7,9 @@ class PrettyPrinter(ASTNodeVisitor):
 
     def __init__(self):
         self.indent = ""
-    
+
     def visit_num(self, num):
-        res_string = str(num.value) + ";\n"
+        res_string = self.indent + str(num.value) + ";\n"
         return res_string
 
     def visit_func(self, func):
