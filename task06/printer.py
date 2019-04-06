@@ -84,7 +84,12 @@ class PrettyPrinter(ASTNodeVisitor):
         return self.indent() + ref.name + ";"
 
     def visit_bin_op(self, bin_op):
-        pass
+        expr_printer = PrettyPrinter()
+        res_string = self.indent() + "("
+        res_string += remove_semicolon(bin_op.lhs.accept(expr_printer))
+        res_string += " " + bin_op.op + " "
+        res_string += remove_semicolon(bin_op.rhs.accept(expr_printer))
+        return res_string + ");"
 
     def visit_un_op(self, un_op):
         pass
