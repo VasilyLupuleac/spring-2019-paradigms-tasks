@@ -56,7 +56,12 @@ class PrettyPrinter(ASTNodeVisitor):
         return res_string
 
     def visit_print(self, pr):
-        pass
+        res_string = self.indent() + "print "
+        expr_printer = PrettyPrinter()
+        res_string += pr.expr.accept(expr_printer)
+        if not res_string.endswith(";"):
+            res_string += ";"
+        return res_string
 
     def visit_read(self, read):
         pass
