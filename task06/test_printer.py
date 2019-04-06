@@ -65,9 +65,9 @@ def test_print_bin_op():
     add = BinaryOperation(Number(2), "+", Number(3))
     mul = BinaryOperation(Number(1), "*", add)
     pr = PrettyPrinter()
-    assert mul.accept(pr) == "(1 * (2 + 3));"
+    assert mul.accept(pr) == "((1) * ((2) + (3)));"
     pr.depth = 1
-    assert add.accept(pr) == "    (2 + 3);"
+    assert add.accept(pr) == "    ((2) + (3));"
 
 
 def test_print_bin_op():
