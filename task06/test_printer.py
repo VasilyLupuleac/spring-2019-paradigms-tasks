@@ -77,5 +77,29 @@ def test_print_bin_op():
     assert UnaryOperation("!", Number(10)).accept(pr) == "    (!(10));"
 
 
+def test_end_to_end(capsys):
+    pretty_print(FunctionDefinition("main", Function(["arg1"], [
+        Read("x"),
+        Print(Reference("x")),
+        Conditional(
+            BinaryOperation(Number(2), "==", Number(3)),
+            [
+                Conditional(Number(1), [], [])
+            ],
+            [
+                FunctionCall(Reference("exit"), [
+                    UnaryOperation("-", Reference("arg1"))
+                ])
+            ],
+        ),
+    ])))
+    out, err = capsys.readouterr()
+    assert not err
+    assert out == ("def main(arg1) {\n    read x;\n" + "    print x;\n" +
+                   "    if (((2) == (3))) {\n" + "        if (1) {\n" +
+                   "        }\n" + "    } else {\n" +
+                   "        exit((-(arg1)));\n" + "    }\n" + "}\n")
+
+
 if __name__ == "__main__":
     pytest.main()

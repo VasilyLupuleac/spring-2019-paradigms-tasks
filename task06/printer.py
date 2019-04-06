@@ -100,4 +100,5 @@ class PrettyPrinter(ASTNodeVisitor):
 
 
 def pretty_print(program):
-    pass
+    pr = PrettyPrinter()
+    print(program.accept(pr))
