@@ -6,10 +6,10 @@ class PrettyPrinter(ASTNodeVisitor):
     IND = "    "
 
     def __init__(self):
-        self.indent = ""
+        self.depth = 0
 
     def visit_num(self, num):
-        res_string = self.indent + str(num.value) + ";\n"
+        res_string = self.IND * self.depth + str(num.value) + ";\n"
         return res_string
 
     def visit_func(self, func):
