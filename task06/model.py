@@ -30,7 +30,7 @@ class ASTNode(metaclass=abc.ABCMeta):
 
 class ASTNodeVisitor(metaclass=abc.ABCMeta):
     @abc.abstractmethod
-    def visit_number(self, num):
+    def visit_num(self, num):
         pass
 
     @abc.abstractmethod
