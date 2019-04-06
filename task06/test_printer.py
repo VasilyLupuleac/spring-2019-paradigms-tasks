@@ -45,7 +45,12 @@ def test_print_read():
 
 
 def test_print_func_call():
-    pass
+    empty = FunctionCall(Reference("empty"), [])
+    foo = FunctionCall(Reference("foo"), [Number(1), Number(2), Number(3)])
+    pr = PrettyPrinter()
+    assert empty.accept(pr) == "empty();"
+    pr.depth = 1
+    assert foo.accept(pr) == "    foo(1, 2, 3);"
 
 
 def test_print_ref():

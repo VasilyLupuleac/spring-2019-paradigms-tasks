@@ -72,8 +72,9 @@ class PrettyPrinter(ASTNodeVisitor):
         func = func_call.fun_expr
         res_string = remove_semicolon(func.accept(self))
         res_string += "("
+        arg_printer = PrettyPrinter()
         for arg in func_call.args:
-            res_string += remove_semicolon(arg.accept(self)) + ", "
+            res_string += remove_semicolon(arg.accept(arg_printer)) + ", "
         if res_string.endswith(", "):
             res_string = res_string[:-2]
         res_string += ");"
