@@ -80,7 +80,7 @@ class PrettyPrinter(ASTNodeVisitor):
         return res_string
 
     def visit_ref(self, ref):
-        pass
+        return self.indent() + ref.name + ";"
 
     def visit_bin_op(self, bin_op):
         pass

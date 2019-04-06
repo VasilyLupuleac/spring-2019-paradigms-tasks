@@ -48,5 +48,13 @@ def test_print_func_call():
     pass
 
 
+def test_print_ref():
+    x = Reference("x")
+    pr = PrettyPrinter()
+    assert x.accept(pr) == "x;"
+    pr.depth = 1
+    assert x.accept(pr) == "    x;"
+
+
 if __name__ == "__main__":
     pytest.main()
