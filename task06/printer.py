@@ -3,12 +3,9 @@ from model import *
 
 
 class PrettyPrinter(ASTNodeVisitor):
-    def __init__(self):
-        self.string = ""
-
     def visit_num(self, num):
-        self.string = str(num.value) + ";"
-        return self.string
+        res_string = str(num.value) + ";"
+        return res_string
 
     def visit_func(self, func):
         pass
