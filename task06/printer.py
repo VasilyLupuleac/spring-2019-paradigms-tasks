@@ -9,7 +9,7 @@ class PrettyPrinter(ASTNodeVisitor):
         self.depth = 0
 
     def visit_num(self, num):
-        res_string = self.IND * self.depth + str(num.value) + ";\n"
+        res_string = self.IND * self.depth + str(num.value) + ";"
         return res_string
 
     def visit_func(self, func):
@@ -26,9 +26,9 @@ class PrettyPrinter(ASTNodeVisitor):
             res_string += ") {\n"
         self.depth += 1
         for stmt in func.body:
-            res_string += stmt.accept(self)
+            res_string += stmt.accept(self) + "\n"
         self.depth -= 1
-        return res_string + self.IND * self.depth + "}\n"
+        return res_string + self.IND * self.depth + "}"
 
     def visit_cond(self, cond):
         pass
