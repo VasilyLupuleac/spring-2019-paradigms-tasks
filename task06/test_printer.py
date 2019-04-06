@@ -70,5 +70,12 @@ def test_print_bin_op():
     assert add.accept(pr) == "    (2 + 3);"
 
 
+def test_print_bin_op():
+    pr = PrettyPrinter()
+    assert UnaryOperation("-", Number(3)).accept(pr) == "(-(3));"
+    pr.depth = 1
+    assert UnaryOperation("!", Number(10)).accept(pr) == "    (!(10));"
+
+
 if __name__ == "__main__":
     pytest.main()

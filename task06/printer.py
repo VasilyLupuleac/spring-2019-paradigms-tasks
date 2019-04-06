@@ -92,7 +92,11 @@ class PrettyPrinter(ASTNodeVisitor):
         return res_string + ");"
 
     def visit_un_op(self, un_op):
-        pass
+        expr_printer = PrettyPrinter()
+        res_string = self.indent() + "("
+        res_string += un_op.op + "("
+        res_string += remove_semicolon(un_op.expr.accept(expr_printer))
+        return res_string + "));"
 
 
 def pretty_print(program):
