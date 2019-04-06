@@ -31,7 +31,26 @@ class PrettyPrinter(ASTNodeVisitor):
         return res_string + self.IND * self.depth + "}"
 
     def visit_cond(self, cond):
-        pass
+        res_string = self.IND * self.depth + "if ("
+        cond_printer = PrettyPrinter()
+        condition = cond.condition.accept(cond_printer)
+        if condition.endswith(";"):
+            condition = condition[:-1]
+        res_string += condition + ") {\n"
+        self.depth += 1
+        for stmt in cond.if_true or []:
+            res_string += stmt.accept(self) + "\n"
+        self.depth -= 1
+        res_string += self.IND * self.depth + "}"
+        if not cond.if_false:
+            return res_string
+        res_string += " else {\n"
+        self.depth += 1
+        for stmt in cond.if_false:
+            res_string += stmt.accept(self) + "\n"
+        self.depth -= 1
+        res_string += self.IND * self.depth + "}"
+        return res_string
 
     def visit_print(self, pr):
         pass
