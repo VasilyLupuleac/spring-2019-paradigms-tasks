@@ -19,5 +19,30 @@ def test_print_func_def():
     assert foo.accept(pr) == "    def foo(a, b, c) {\n        15;\n    }"
 
 
+def test_print_cond():
+    empty = Conditional(Number(42), [], [])
+    cond = Conditional(Number(0), [Number(1), Number(10)], [Number(-1)])
+    pr = PrettyPrinter()
+    assert cond.accept(pr) == "if (0) {\n    1;\n    10;\n} else {\n    -1;\n}"
+    pr.depth = 1
+    assert empty.accept(pr) == "    if (42) {\n    }"
+
+
+def test_print_print():
+    print_42 = Print(Number(42))
+    pr = PrettyPrinter()
+    assert print_42.accept(pr) == "print 42;"
+    pr.depth = 2
+    assert print_42.accept(pr) == "        print 42;"
+
+
+def test_print_read():
+    read_x = Read("x")
+    pr = PrettyPrinter()
+    assert read_x.accept(pr) == "read x;"
+    pr.depth = 1
+    assert read_x.accept(pr) == "    read x;"
+
+
 if __name__ == "__main__":
     pytest.main()
