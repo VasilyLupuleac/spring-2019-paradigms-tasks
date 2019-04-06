@@ -10,6 +10,14 @@ def test_print_number():
     assert Number(1000).accept(pr) == "    1000;\n"
 
 
+def test_print_func_def():
+    empty = FunctionDefinition("empty", Function([], []))
+    foo = FunctionDefinition("foo", Function(["a", "b", "c"], [Number(15)]))
+    pr = PrettyPrinter()
+    assert empty.accept(pr) == "def empty() {\n}\n"
+    pr.depth = 1
+    assert foo.accept(pr) == "    def foo(a, b, c) {\n        15;\n    }\n"
+
 
 if __name__ == "__main__":
     pytest.main()

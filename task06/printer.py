@@ -16,7 +16,19 @@ class PrettyPrinter(ASTNodeVisitor):
         raise NotImplementedError
 
     def visit_func_def(self, func_def):
-        pass
+        res_string = self.IND * self.depth + "def " + func_def.name + "("
+        func = func_def.function
+        for arg in func.args:
+            res_string += arg + ", "
+        if res_string.endswith(", "):
+            res_string = res_string[:-2] + ") {\n"
+        else:
+            res_string += ") {\n"
+        self.depth += 1
+        for stmt in func.body:
+            res_string += stmt.accept(self)
+        self.depth -= 1
+        return res_string + self.IND * self.depth + "}\n"
 
     def visit_cond(self, cond):
         pass
