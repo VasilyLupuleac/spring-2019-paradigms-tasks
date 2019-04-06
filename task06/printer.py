@@ -2,6 +2,12 @@
 from model import *
 
 
+def remove_semicolon(string):
+    if string.endswith(";"):
+        string = string[:-1]
+    return string
+
+
 class PrettyPrinter(ASTNodeVisitor):
     IND = "    "
 
@@ -37,9 +43,7 @@ class PrettyPrinter(ASTNodeVisitor):
         res_string = self.indent() + "if ("
         cond_printer = PrettyPrinter()
         condition = cond.condition.accept(cond_printer)
-        if condition.endswith(";"):
-            condition = condition[:-1]
-        res_string += condition + ") {\n"
+        res_string += remove_semicolon(condition) + ") {\n"
         self.depth += 1
         for stmt in cond.if_true or []:
             res_string += stmt.accept(self) + "\n"
@@ -59,8 +63,6 @@ class PrettyPrinter(ASTNodeVisitor):
         res_string = self.indent() + "print "
         expr_printer = PrettyPrinter()
         res_string += pr.expr.accept(expr_printer)
-        if not res_string.endswith(";"):
-            res_string += ";"
         return res_string
 
     def visit_read(self, read):
@@ -68,20 +70,14 @@ class PrettyPrinter(ASTNodeVisitor):
 
     def visit_func_call(self, func_call):
         func = func_call.fun_expr
-        res_string = func.accept(self)
-        if res_string.endswith(";"):
-            res_string = res_string[:-1]
+        res_string = remove_semicolon(func.accept(self))
         res_string += "("
         for arg in func_call.args:
-            arg_expr = arg.accept(self)
-            if arg_expr.endswith(";"):
-                arg_expr = arg_expr[:-1]
-            res_string += arg_expr + ", "
+            res_string += remove_semicolon(arg.accept(self)) + ", "
         if res_string.endswith(", "):
             res_string = res_string[:-2]
         res_string += ");"
         return res_string
-
 
     def visit_ref(self, ref):
         pass
