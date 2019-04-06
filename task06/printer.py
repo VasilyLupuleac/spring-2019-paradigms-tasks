@@ -8,7 +8,7 @@ class PrettyPrinter(ASTNodeVisitor):
         return res_string
 
     def visit_func(self, func):
-        pass
+        raise NotImplementedError
 
     def visit_func_def(self, func_def):
         pass
