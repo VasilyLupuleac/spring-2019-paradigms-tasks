@@ -9,30 +9,25 @@ def remove_semicolon(string):
 
 
 class PrettyPrinter(ASTNodeVisitor):
-    IND = "    "
+    INDENT = "    "
 
     def __init__(self):
         self.depth = 0
 
     def indent(self):
-        return self.IND * self.depth
+        return self.INDENT * self.depth
 
     def visit_num(self, num):
-        res_string = self.indent() + str(num.value) + ";"
-        return res_string
+        return self.indent() + str(num.value) + ";"
 
     def visit_func(self, func):
-        raise NotImplementedError
+        raise TypeError
 
     def visit_func_def(self, func_def):
         res_string = self.indent() + "def " + func_def.name + "("
         func = func_def.function
-        for arg in func.args:
-            res_string += arg + ", "
-        if res_string.endswith(", "):
-            res_string = res_string[:-2] + ") {\n"
-        else:
-            res_string += ") {\n"
+        res_string += ", ".join(func.args)
+        res_string += ") {\n"
         self.depth += 1
         for stmt in func.body:
             res_string += stmt.accept(self) + "\n"
@@ -41,8 +36,7 @@ class PrettyPrinter(ASTNodeVisitor):
 
     def visit_cond(self, cond):
         res_string = self.indent() + "if ("
-        cond_printer = PrettyPrinter()
-        condition = cond.condition.accept(cond_printer)
+        condition = cond.condition.accept(PrettyPrinter())
         res_string += remove_semicolon(condition) + ") {\n"
         self.depth += 1
         for stmt in cond.if_true or []:
@@ -73,10 +67,9 @@ class PrettyPrinter(ASTNodeVisitor):
         res_string = remove_semicolon(func.accept(self))
         res_string += "("
         arg_printer = PrettyPrinter()
-        for arg in func_call.args:
-            res_string += remove_semicolon(arg.accept(arg_printer)) + ", "
-        if res_string.endswith(", "):
-            res_string = res_string[:-2]
+        formatted_args = [remove_semicolon(arg.accept(arg_printer))
+                          for arg in func_call.args]
+        res_string += ", ".join(formatted_args)
         res_string += ");"
         return res_string
 
