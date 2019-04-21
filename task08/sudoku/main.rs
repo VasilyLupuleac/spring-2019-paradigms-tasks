@@ -170,16 +170,26 @@ fn find_solution(f: &mut Field) -> Option<Field> {
 /// Если хотя бы одно решение `s` существует, возвращает `Some(s)`,
 /// в противном случае возвращает `None`.
 fn find_solution_parallel(mut f: Field) -> Option<Field> {
-    // TODO: вам требуется изменить эту функцию.
     const THREADS : usize = 8;
     let pool = ThreadPool::new(THREADS);
-    let (tx, rx) = channel();
-    let tx1 = tx.clone();
-    pool.execute(move|| {
-        tx1.send(find_solution(&mut f)).unwrap();
-    });
-    std::mem::drop(tx);
-    rx.into_iter().find_map(|x| x)
+    let (snd, rcv) = channel();
+    try_extend_field(&mut f,
+        |f_solved| {
+            let tx = snd.clone();
+            tx.send(Some(f_solved.clone())).unwrap_or(());
+        },
+        |f| {
+            let mut f = f.clone();
+            let tx = snd.clone();
+            pool.execute(move|| {
+                tx.send(find_solution(&mut f)).unwrap_or(());
+            });
+            None
+        }
+    );
+         
+    std::mem::drop(snd);
+    rcv.into_iter().find_map(|x| x)
 }
 
 /// Юнит-тест, проверяющий, что `find_solution()` находит лексикографически минимальное решение на пустом поле.
