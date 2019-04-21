@@ -166,17 +166,16 @@ fn find_solution(f: &mut Field) -> Option<Field> {
     try_extend_field(f, |f_solved| f_solved.clone(), find_solution)
 }
 
-fn spawn_tasks(f: &mut Field, pool: &ThreadPool, snd: &Sender<Option<Field>>, spawn_depth: i32) -> Option<()> {
+fn spawn_tasks(f: &mut Field, pool: &ThreadPool, tx: &Sender<Option<Field>>, spawn_depth: i32) -> Option<()> {
     if spawn_depth <= 1 {
         try_extend_field(
             f,
             |f_solved| {
-                let tx = snd.clone();
                 tx.send(Some(f_solved.clone())).unwrap_or(());
             },
             |f| {
                 let mut f = f.clone();
-                let tx = snd.clone();
+                let tx = tx.clone();
                 pool.execute(move || {
                     tx.send(find_solution(&mut f)).unwrap_or(());
                 });
@@ -187,10 +186,10 @@ fn spawn_tasks(f: &mut Field, pool: &ThreadPool, snd: &Sender<Option<Field>>, sp
         try_extend_field(
             f,
             |f_solved| {
-                let tx = snd.clone();
+                let tx = tx.clone();
                 tx.send(Some(f_solved.clone())).unwrap_or(());
             },
-            |f| spawn_tasks(f, pool, snd, spawn_depth - 1),
+            |f| spawn_tasks(f, pool, tx, spawn_depth - 1),
         );
     }
     None
@@ -203,9 +202,9 @@ fn find_solution_parallel(mut f: Field) -> Option<Field> {
     const THREADS_NUMBER: usize = 8;
     const SPAWN_DEPTH: i32 = 2;
     let pool = ThreadPool::new(THREADS_NUMBER);
-    let (snd, rcv) = channel();
-    spawn_tasks(&mut f, &pool, &snd, SPAWN_DEPTH);
-    std::mem::drop(snd);
+    let (tx, rcv) = channel();
+    spawn_tasks(&mut f, &pool, &tx, SPAWN_DEPTH);
+    std::mem::drop(tx);
     rcv.into_iter().find_map(|x| x)
 }
 
