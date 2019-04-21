@@ -190,7 +190,7 @@ fn spawn_tasks(f: &mut Field, pool: &ThreadPool, snd: &Sender<Option<Field>>, sp
                 let tx = snd.clone();
                 tx.send(Some(f_solved.clone())).unwrap_or(());
             },
-            |f| -> Option<()> { spawn_tasks(f, pool, snd, spawn_depth - 1) },
+            |f| spawn_tasks(f, pool, snd, spawn_depth - 1),
         );
     }
     None
