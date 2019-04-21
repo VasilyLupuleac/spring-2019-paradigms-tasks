@@ -186,7 +186,6 @@ fn spawn_tasks(f: &mut Field, pool: &ThreadPool, tx: &Sender<Option<Field>>, spa
         try_extend_field(
             f,
             |f_solved| {
-                let tx = tx.clone();
                 tx.send(Some(f_solved.clone())).unwrap_or(());
             },
             |f| spawn_tasks(f, pool, tx, spawn_depth - 1),
