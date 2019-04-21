@@ -202,10 +202,10 @@ fn find_solution_parallel(mut f: Field) -> Option<Field> {
     const THREADS_NUMBER: usize = 8;
     const SPAWN_DEPTH: i32 = 2;
     let pool = ThreadPool::new(THREADS_NUMBER);
-    let (tx, rcv) = channel();
+    let (tx, rx) = channel();
     spawn_tasks(&mut f, &pool, &tx, SPAWN_DEPTH);
     std::mem::drop(tx);
-    rcv.into_iter().find_map(|x| x)
+    rx.into_iter().find_map(|x| x)
 }
 
 /// Юнит-тест, проверяющий, что `find_solution()` находит лексикографически минимальное решение на пустом поле.
