@@ -1,23 +1,27 @@
 #include "tsqueue.h"
 
 void threadsafe_queue_init(ThreadsafeQueue *q) {
-    // TODO
-    static_cast<void>(q);  // Как-нибудь используем переменную.
+    queue_init(&(q->q));
+    pthread_mutex_init(&(q->m), nullptr);
 }
 
 void threadsafe_queue_destroy(ThreadsafeQueue *q) {
-    // TODO
-    static_cast<void>(q);  // Как-нибудь используем переменную.
+    queue_destroy(&(q->q));
+    pthread_mutex_destroy(&(q->m));
 }
 
 void threadsafe_queue_push(ThreadsafeQueue *q, void *data) {
-    // TODO
-    static_cast<void>(q);  // Как-нибудь используем переменную.
-    static_cast<void>(data);  // Как-нибудь используем переменную.
+    pthread_mutex_lock(&(q->m));
+    queue_push(&(q->q), data);
+    pthread_cond_signal(&(q->cond));
+    pthread_mutex_unlock(&(q->m));
 }
 
 void *threadsafe_queue_wait_and_pop(ThreadsafeQueue *q) {
-    // TODO
-    static_cast<void>(q);  // Как-нибудь используем переменную.
-    return nullptr;
+    pthread_mutex_lock(&(q->m));
+    while (queue_empty(&(q->q)))
+        pthread_cond_wait(&(q->cond));
+    void *data = queue_pop(&(q->q));
+    pthread_mutex_unlock(&(q->m));
+    return data;
 }
