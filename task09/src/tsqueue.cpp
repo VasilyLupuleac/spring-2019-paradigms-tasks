@@ -2,8 +2,8 @@
 
 void threadsafe_queue_init(ThreadsafeQueue *q) {
     queue_init(&q->q);
-    pthread_mutex_init(&q->m), nullptr);
-    pthread_cond_element_pushed_init(&q->cond_element_pushed), nullptr);
+    pthread_mutex_init(&q->m, nullptr);
+    pthread_cond_element_pushed_init(&q->cond_element_pushed, nullptr);
 }
 
 void threadsafe_queue_destroy(ThreadsafeQueue *q) {
@@ -22,7 +22,7 @@ void threadsafe_queue_push(ThreadsafeQueue *q, void *data) {
 void *threadsafe_queue_wait_and_pop(ThreadsafeQueue *q) {
     pthread_mutex_lock(&q->m);
     while (queue_empty(&q->q))
-        pthread_cond_element_pushed_wait(&q->cond_element_pushed), &q->m);
+        pthread_cond_element_pushed_wait(&q->cond_element_pushed, &q->m);
     void *data = queue_pop(&q->q);
     pthread_mutex_unlock(&q->m);
     return data;
