@@ -29,7 +29,7 @@ drop' n (_:xs) = drop' (n - 1) xs
 -- 5. filter' возвращает список из элементов, для которых f возвращает True
 filter' :: (a -> Bool) -> [a] -> [a]
 filter' f (x:xs) |f x       = x : filter f xs
-               |otherwise = filter f xs
+                 |otherwise = filter f xs
 
 -- 6. foldl'' последовательно применяет функцию f к элементу списка l и значению,
 -- полученному на предыдущем шаге, начальное значение
