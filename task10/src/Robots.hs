@@ -65,7 +65,7 @@ damage victim amount = let
 -- Вам понадобится вспомогательная функция isAlive, которая бы проверяла, жив робот или не очень
 -- Робот считается живым, если его уровень здоровья строго больше нуля.
 isAlive :: Robot -> Bool
-isAlive myRobot = ((getHealth myRobot) > 0)
+isAlive myRobot = (getHealth myRobot) > 0
 
 -- Затем, используя функцию damage, напишите функцию, которая моделирует один раунд схватки между
 -- двумя роботами
@@ -77,7 +77,7 @@ isAlive myRobot = ((getHealth myRobot) > 0)
 -- вернуть второго робота, как будто ничего и не было
 fight :: Robot -> Robot -> Robot
 fight attacker defender | isAlive attacker = damage defender (getAttack attacker)
-                        | otherwise = defender
+                        | otherwise        = defender
 
 -- Наконец, напишите функцию, которая бы моделировала три раунда схватки между
 -- двумя роботами и возвращала бы победителя. Схватка происходит следующим образом:
@@ -100,11 +100,11 @@ threeRoundFight attacker defender = let
 -- Шаг 4.
 -- Создайте список из трех роботов(Абсолютно любых, но лучше живых, мы собираемся их побить)
 roboter :: [Robot]
-roboter = [robot "cout << kek" 10 30, robot "cout << lol" 30 10, robot "cout << mem" 20 20]
+roboter = [robot "Frank" 20 40, robot "David" 50 60, robot "Crew" 20 20]
 
 -- Затем создайте четвертого
 neueRobot :: Robot
-neueRobot = robot "Segmentation fault" 100 100
+neueRobot = robot "HAL 9000" 50 40
 
 -- Используя частичное применение напишите функцию, которая бы принимала на вход робота
 -- и атаковала бы его роботом neueRobot
