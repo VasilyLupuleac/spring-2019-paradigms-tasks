@@ -16,8 +16,7 @@ tail' (_:xs) = xs
 -- 3. take' возвращает первые n >= 0 элементов исходного списка
 take' :: Int -> [a] -> [a]
 take' 0 _      = []
-take' _ []     = undefined
-take' n (x:xs) = x : take (n - 1) xs
+take' n (x:xs) = x : take' (n - 1) xs
 
 -- 4. drop' возвращает список без первых n >= 0 элементов; если n больше длины
 -- списка, то пустой список.
@@ -28,8 +27,8 @@ drop' n (_:xs) = drop' (n - 1) xs
 
 -- 5. filter' возвращает список из элементов, для которых f возвращает True
 filter' :: (a -> Bool) -> [a] -> [a]
-filter' f (x:xs) |f x       = x : filter f xs
-                 |otherwise = filter f xs
+filter' f (x:xs) |f x       = x : filter' f xs
+                 |otherwise = filter' f xs
 
 -- 6. foldl'' последовательно применяет функцию f к элементу списка l и значению,
 -- полученному на предыдущем шаге, начальное значение
@@ -43,7 +42,7 @@ foldl'' f z (x:xs) = foldl'' f (f z x) xs
 -- concat' [1,2] [3] == [1,2,3]
 concat' :: [a] -> [a] -> [a]
 concat' [] xs     = xs
-concat' (x:xs) ys = x:(concat' xs ys)
+concat' (x:xs) ys = x : concat' xs ys
 
 -- 8. quickSort' возвращает его отсортированный список
 -- quickSort' должен быть реализован через алгоритм QuickSort
