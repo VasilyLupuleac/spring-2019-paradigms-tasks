@@ -14,7 +14,7 @@ testsRobots = let
         dead   = robot "T-800" 40 (-25)
     in testGroup "Unit tests for Robots task"
         [ testCase "Test for getName" $
-            getName walter @?= "Walter"
+            getName bender @?= "Bender"
 
         , testCase "Test for getAttack" $
             getAttack bender @?= 80
@@ -52,7 +52,7 @@ testsRobots = let
         , testCase "Test for threeRoundFight finished after one round" $
             threeRoundFight bender walter @?= bender
 
-		, testCase "Test for threeRoundFight finished after two rounds" $
+        , testCase "Test for threeRoundFight finished after two rounds" $
             threeRoundFight bender tanky @?= robot "Bastion" 22 120
 
         , testCase "Test for threeRoundFight finished after three rounds" $
@@ -62,5 +62,5 @@ testsRobots = let
             neueRobotAttak bender @?= robot "Bender" 80 (-30)
 
         , testCase "Test for survivors" $
-		    survivors @?= [robot "David" 50 60]
+            survivors @?= [robot "David" 50 60]
         ]
