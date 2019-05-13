@@ -79,6 +79,12 @@ fight :: Robot -> Robot -> Robot
 fight attacker defender | isAlive attacker = damage defender (getAttack attacker)
                         | otherwise        = defender
 
+winner :: Robot -> Robot -> Robot
+winner robot' robot'' =
+    if getHealth robot' >= getHealth robot''
+        then robot'
+        else robot''
+
 -- Наконец, напишите функцию, которая бы моделировала три раунда схватки между
 -- двумя роботами и возвращала бы победителя. Схватка происходит следующим образом:
 -- 1. Атакующий робот ударяет защищающегося, как в предыдущей функции
@@ -90,12 +96,10 @@ fight attacker defender | isAlive attacker = damage defender (getAttack attacker
 -- победителем считается тот, кто ударял первым(то есть атакующий робот)
 threeRoundFight :: Robot -> Robot -> Robot
 threeRoundFight attacker defender = let
-        second_round_defender = fight attacker defender
-        third_round_attacker = fight second_round_defender attacker
-        third_round_defender = fight third_round_attacker second_round_defender
-    in if getHealth third_round_attacker >= getHealth third_round_defender
-        then third_round_attacker
-        else third_round_defender
+        defender' = fight attacker defender
+        attacker' = fight defender' attacker
+        defender'' = fight attacker' defender'
+    in winner attacker' defender''
 
 -- Шаг 4.
 -- Создайте список из трех роботов(Абсолютно любых, но лучше живых, мы собираемся их побить)
