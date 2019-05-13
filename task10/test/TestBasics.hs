@@ -41,6 +41,12 @@ testsBasics = testGroup "Unit tests for Basics tasks"
     , testCase "foldl'' can be used for finding sum of elements" $
         foldl'' (+) 0 [1,2,3] @?= 6
 
+    , testCase "foldl'' works with non-associative functions" $
+        foldl'' (-) 0 [1,2,3,4] @?= -10
+
+    , testCase "foldl'' function calls are ordered correctly" $
+        foldl'' (\x y -> y ^ x) 0 [7, 2, 3, 5] @?= 5 ^ 9
+
     , testCase "concat' works on finite lists as expected" $
         concat' [1,2,3] [4,5,6] @?= [1..6]
 

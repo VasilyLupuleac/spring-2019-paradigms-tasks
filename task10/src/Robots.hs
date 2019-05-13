@@ -80,10 +80,8 @@ fight attacker defender | isAlive attacker = damage defender (getAttack attacker
                         | otherwise        = defender
 
 getWinner :: Robot -> Robot -> Robot
-getWinner attacker defender =
-    if getHealth attacker >= getHealth defender
-        then attacker
-        else defender
+getWinner attacker defender | getHealth attacker >= getHealth defender = attacker
+                            | otherwise                                = defender
 
 -- Наконец, напишите функцию, которая бы моделировала три раунда схватки между
 -- двумя роботами и возвращала бы победителя. Схватка происходит следующим образом:
