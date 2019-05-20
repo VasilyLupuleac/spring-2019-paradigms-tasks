@@ -3,6 +3,8 @@
 -}
 module Map where
 
+import Data.Maybe
+
 {-|
   Поведение всех определённых здесь функций должно быть аналогично
   поведению функций из модуля "Data.Map.Strict".
@@ -31,45 +33,45 @@ class Map t where
     singleton :: k -> a -> t k a
 
     fromList :: Ord k => [(k, a)] -> t k a
-    fromList = undefined {- insert -}
+    fromList list = foldl (\m (k, a) -> insert k a m) empty list
 
     toAscList :: t k a -> [(k, a)]
 
     insert :: Ord k => k -> a -> t k a -> t k a
-    insert = undefined {- insertWith -}
+    insert = insertWith const
 
     insertWith :: Ord k => (a -> a -> a) -> k -> a -> t k a -> t k a
-    insertWith = undefined {- alter -}
+    insertWith f k a = alter (\x -> maybe (Just a) (\y -> Just (f a y)) x) k
 
     insertWithKey :: Ord k => (k -> a -> a -> a) -> k -> a -> t k a -> t k a
-    insertWithKey = undefined {- insertWith -}
+    insertWithKey f k = insertWith (f k) k
 
     delete :: Ord k => k -> t k a -> t k a
-    delete = undefined {- alter -}
+    delete = alter (const Nothing)
 
     adjust :: Ord k => (a -> a) -> k -> t k a -> t k a
-    adjust = undefined {- alter -}
+    adjust f = alter (\x -> maybe Nothing (\y -> Just (f y)) x)
 
     adjustWithKey :: Ord k => (k -> a -> a) -> k -> t k a -> t k a
-    adjustWithKey = undefined {- adjust -}
+    adjustWithKey f k = adjust (f k) k
 
     update :: Ord k => (a -> Maybe a) -> k -> t k a -> t k a
-    update = undefined {- alter -}
+    update f = alter (\x -> maybe Nothing f x)
 
     updateWithKey :: Ord k => (k -> a -> Maybe a) -> k -> t k a -> t k a
-    updateWithKey = undefined {- update -}
+    updateWithKey f k = update (f k) k
 
     alter :: Ord k => (Maybe a -> Maybe a) -> k -> t k a -> t k a
 
     lookup :: Ord k => k -> t k a -> Maybe a
 
     member :: Ord k => k -> t k a -> Bool
-    member = undefined {- lookup -}
+    member k = isJust . (Map.lookup k)
 
     notMember :: Ord k => k -> t k a -> Bool
-    notMember = undefined {- member -}
+    notMember k = not . (member k)
 
     null :: t k a -> Bool
-    null = undefined {- size -}
+    null m = (size m) == 0
 
     size :: t k a -> Int
